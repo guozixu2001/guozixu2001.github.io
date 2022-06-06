@@ -1,0 +1,259 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ADT与OOP | Rocco&#39;s Cache</title>
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654510361300">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="ADT与OOP | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="ADT
+如何设计ADT？
+设计ADT：设计规约Spec-&gt;表示不变性Rep-&gt;实现Impl
+规约Spec的写法：
+
+方法注释
+@param 参数说明
+@return 返回值说明
+@throw 抛出异常
+
+规约Spec的强度：
+前..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://guozixu2001.github.io/">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654510361300" alt="">
+  </a>
+  <h1 class="site-title">
+    Rocco&#39;s Cache
+  </h1>
+  <p class="site-description">
+    Rocco写东西的Cache
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              ADT与OOP
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-05-20
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="adt">ADT</h1>
+<p><strong>如何设计ADT？</strong><br>
+设计ADT：设计规约Spec-&gt;表示不变性Rep-&gt;实现Impl</p>
+<p><strong>规约Spec的写法：</strong></p>
+<ul>
+<li>方法注释</li>
+<li>@param 参数说明</li>
+<li>@return 返回值说明</li>
+<li>@throw 抛出异常</li>
+</ul>
+<p><strong>规约Spec的强度：</strong><br>
+前置条件越弱，规约强度越强；<br>
+后置条件越强，规约强度越强；<br>
+其他情况无法比较。<br>
+<strong>规约Spec的评价：</strong></p>
+<ul>
+<li>内聚的：一个好的规约Spec应该功能单一，易于理解；</li>
+<li>信息丰富的：不产生歧义；</li>
+<li>足够“强”的：使开发人员应该考虑足够多的异常情况并进行处理；</li>
+<li>足够“弱”的：为开发人员减轻工作负担并降低开发成本。</li>
+</ul>
+<p><strong>抽象函数AF：</strong><br>
+表示R(表示空间)和A(抽象空间)之间关系的一个映射<br>
+AF:R-&gt;A；</p>
+<p><strong>表示不变量RI：</strong><br>
+描述什么是合法的表示值，是所有表示值的一个子集。</p>
+<p><strong>ADT实现Impl(表示泄露)</strong><br>
+  通过防御式拷贝，给客户端返回一个全新的对象，即使客户端修改了数据，也不会影响自己。然而大量的拷贝会占用内存空间，因此很多时候会使用不可变数据类型以节省频繁复制的代价。</p>
+<p><strong>ADT测试Test</strong><br>
+  需要注意的是，由于测试时开发者也相当于用户，因此不能直接访问ADT内部的数据域，只能调用其他方法测试待测的方法。</p>
+<ul>
+<li>针对creater：构造对象后，用observer观察是否正确；</li>
+<li>针对observer：用其他方法构造对象，调用被测observer，观察判断结果是否正确；</li>
+<li>针对producer：produce一个新的对象，用observer观察结果是否正确。</li>
+</ul>
+<h1 id="oop">OOP</h1>
+<h2 id="基本概念">基本概念</h2>
+<p><strong>接口(Interface):</strong><br>
+接口之间可以继承与扩展；<br>
+一个类可以实现多个接口；<br>
+一个接口可以有多个实现类。</p>
+<p><strong>重写：</strong></p>
+<ul>
+<li>参数列表必须与父类完全相同；</li>
+<li>访问权限不能比父类中被重写的方法的访问权限更低；</li>
+<li>声明为 final 的方法不能被重写；</li>
+<li>构造方法不能被重写；</li>
+<li>当需要在子类中调用父类的被重写方法时，要使用 super 关键字。</li>
+</ul>
+<p><strong>多态：</strong><br>
+  多态是同一个行为具有多种不同表现形式或形态的能力，可以消除类型之间的耦合关系</p>
+<h1 id="adt和oop中的等价性">ADT和OOP中的等价性</h1>
+<h2 id="不可变对象">不可变对象</h2>
+<ul>
+<li>引用等价性与对象等价性<br>
+“==”是引用等价，即两个引用指向了相同的内存空间；<br>
+“equals()”是对象等价，即两个对象的域相同。</li>
+<li>如何判断两个不可变对象相等<br>
+如果AF映射到同样的结果则等价。在自定义ADT中，如果要判断等价，需要重写equals()方法和hashCode()方法。</li>
+</ul>
+<h2 id="可变对象">可变对象</h2>
+<p><strong>观察等价性与行为等价性：</strong></p>
+<ul>
+<li>观察等价性：在不改变状态的情况下，两个可变对象看起来是否一致；</li>
+<li>行为等价性：调用对象的任何方法表现出一致的结果。<br>
+  对可变数据类型，往往倾向于实现严格的观察等价性，但有些时候可能导致bud，甚至破坏RI。对于可变数据类型，无需重写equals()f方法和hashCode()方法，直接继承自Object即可，而如果一定要判断两个可变对象看起来是否一致，最好定义一个新的方法。</li>
+</ul>
+<p><strong>总结</strong><br>
+等价性应该是一种等价关系；<br>
+抽象函数AF是等价性的基础。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#adt">ADT</a></li>
+<li><a href="#oop">OOP</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">基本概念</a></li>
+</ul>
+</li>
+<li><a href="#adt%E5%92%8Coop%E4%B8%AD%E7%9A%84%E7%AD%89%E4%BB%B7%E6%80%A7">ADT和OOP中的等价性</a>
+<ul>
+<li><a href="#%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1">不可变对象</a></li>
+<li><a href="#%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1">可变对象</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://guozixu2001.github.io/post/about/">
+              <h3 class="post-title">
+                关于
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://guozixu2001.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://guozixu2001.github.io/</id>
     <title>Rocco&apos;s Cache</title>
-    <updated>2022-06-06T09:46:02.306Z</updated>
+    <updated>2022-06-06T10:12:49.650Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://guozixu2001.github.io/"/>
     <link rel="self" href="https://guozixu2001.github.io/atom.xml"/>
@@ -74,6 +74,174 @@
 <li>迪米特法则（最少知道原则）（Demeter Principle）:一个实体应当尽量少的与其他实体之间发生相互作用，使得系统功能模块相对独立。</li>
 <li>合成复用原则（Composite Reuse Principle）:原则是尽量使用合成/聚合的方式，而不是使用继承。继承实际上破坏了类的封装性，超类的方法可能会被子类修改。</li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[HIT软件构造复习（1、2章）]]></title>
+        <id>https://guozixu2001.github.io/post/hit-ruan-jian-gou-zao-fu-xi/</id>
+        <link href="https://guozixu2001.github.io/post/hit-ruan-jian-gou-zao-fu-xi/">
+        </link>
+        <updated>2022-05-25T09:47:14.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="multi-dimensional-software-views软件构造中的多维视图">Multi-dimensional software views（软件构造中的多维视图）</h1>
+<ul>
+<li>
+<p>Moment维度关注于程序在某一时刻的表现，而Period关注的是程序在一段时间内的表现。</p>
+</li>
+<li>
+<p>Build-time维度关注程序还未被投入运行，编码阶段的表现，而Run-time维度更关注于程序运行时的表现；</p>
+</li>
+</ul>
+<p><strong>Note:</strong></p>
+<p>code-level view: functions \classes\methods\interfaces(代码逻辑组织）</p>
+<p>component-level view: file \directories\packages\libraries (代码物理组织）</p>
+<p>Static linking :库被拷贝进代码形成整体，执行的时候无需提供库文件（build time）<br>
+runtime views（runtime就是运行，程序被载入目标机器，开始执行。）</p>
+<p>以下是在各种视图（views）中的含义<br>
+code-level ：逻辑实体在内存中如何呈现？（in-memory states）<br>
+component-level ：物理实体在物理硬件环境中如何呈现？（physical environment）<br>
+moment：逻辑/物理实体在内存/硬件中特定时刻的形态。<br>
+period ：逻辑/物理实体在内存和/硬件中随时间如何变化。<br>
+dynamic linking :动态链接</p>
+<h1 id="视图之间的联系">视图之间的联系</h1>
+<p>①从无到有，写出了代码，就进入了Build-time维度，开始只是单个的没有任何联系的代码文件，所以是在moment+Code-level维度；</p>
+<p>②此时随着时间的推移，代码删删改改，就属于Period+Code-level了，而代码越写越多成为了一个包，甚至形成了一个库，于是就属于moment+Component-level维度了；</p>
+<p>③但是随着时间的推移，库文件由于需求的变化发生了变化，所以就属于Period+Component-level；</p>
+<p>④代码写好了，投入运行，进入Run-time维度，观察的如果是某一句代码的执行后结果，那就是moment+Code-level维度，但如果看的是代码执行的轨迹，那就是Period+Code-level维度，而如果看的是一个库文件的连接情况等，那就是moment+Component-level维度了；</p>
+<p>⑤如果看的是线程或进程的执行过程，也就是通过日志等手段查看一段时间内系统都做了什么事情，那么就是Period+Component-level了。</p>
+<h1 id="quality-objectives-of-software-construction外部质量与内部质量">Quality Objectives of Software Construction（外部质量与内部质量）</h1>
+<p>外部质量因素影响用户，内部质量因素影响软件本身和它的开发者，外部质量取决于内部质量。</p>
+<p><strong>外部质量的具体方面：</strong><br>
+（1）正确性（Correctness）：至高无上的质量指标，按照预先定义的“规约”执行。一个可用的软件一定是正确的，所以首要保证软件的正确性，其他的都可以做妥协、让步，但只有这一项不可妥协。<br>
+（2）健壮性（Robustness）:是对正确性的补充，即在出现“规约”定义之外的情形的时候，软件要做出恰当的反应，通俗地说就是出现异常时不要“崩溃”。<br>
+但软件的“正常”与“异常”是主观而非客观的，所谓的“异常”，取决于spec的范畴，那些未被“规约”覆盖的情况即为“异常情况”。<br>
+（3）可扩展性（Extendibility）<br>
+（4）可复用性（Reusability）<br>
+（5）兼容性（Compatibility）<br>
+（6）效率（Efficiency）<br>
+（7）可移植性（Portability）<br>
+（8）易用性（Easy of use）<br>
+（9）功能性（Functionality）</p>
+<p><strong>折中处理：</strong></p>
+<p>①正确的软件开发过程中，开发者应该将不同质量因素之间如何做出折中的设计决策和标准明确的写下来；</p>
+<p>②当某一项满足的足够好的时候有可能其他项的表现极差，此时需要做权衡，使得各部分的表现都较好，在某些特定要求下也可以放弃优化其他项而做到某一项的极致；</p>
+<p>③虽然需要折中，但“正确性”绝不能与其他质量因素折中。</p>
+<p><strong>五个关键的质量指标：</strong></p>
+<ul>
+<li>Elegant and beautiful code：代码要容易理解，通过统一变量/方法的命名标准、代码的风格、注释、包组织结构、必要时重构代码等方式让代码尽可能的容易理解。</li>
+<li>Design for/with reuse：ADT/OOP、接口、继承(Overload、Override)、多态、泛型、框架等技术可用于提高代码的可复用性。</li>
+<li>Low complexity：当复杂度较低的时候，代码就容易被扩展新的功能，所以要高内聚低耦合，遵从SOLID原则、OO设计模式、使用VCS控制代码版本</li>
+<li>Robustness and correctness：使用测试驱动的开发、异常处理、Assertion机制、防御式编程等技术保证程序的健壮性和正确性。</li>
+<li>Performance and efficiency：使用设计模式、并行/多线程等技术提升性能。</li>
+</ul>
+<h1 id="软件测试与测试优先编程">软件测试与测试优先编程</h1>
+<p><strong>测试：</strong><br>
+在规定的条件下对程序进行操作，以发现程序错误，衡量软件品质，并对其是否能满足设计要求进行评估的过程。</p>
+<p>①测试跟其他活动的目标相反：破坏、证错、“负能量”，即我们希望发现“错误”，要转变心态，用“让其出错”和“尽快出错”作为写高质量代码的日常法宝；</p>
+<p>②要认识到即使是再好的测试也不能保证程序里不存在错误</p>
+<p><strong>测试用例：</strong></p>
+<p>测试用例 = 输入+执行条件+结果</p>
+<p>最主要的方法——单元测试：针对软件的最小单元模型开展测试，隔离各个模块，容易定位错误和调试。</p>
+<p>基于等价类划分的测试：将被测函数的输入域划分为等价类，从等价类中导出测试用例。</p>
+<p>此外还要注意边界值分析方法的补充，即在进行等价类划分的时候，需要把边界也作为等价类之一加入考虑。</p>
+<p><strong>覆盖度：</strong></p>
+<ul>
+<li>
+<p>代码覆盖度<br>
+基于代码的测试覆盖评测测试过程中已经执行的代码的多少，与之相对的是要执行的剩余代码的多少。</p>
+</li>
+<li>
+<p>输入空间覆盖度<br>
+参照模块的规格说明，测试用例占总输入空间的比例。</p>
+</li>
+</ul>
+<p><strong>效率：</strong><br>
+成果（测试结果）/资源（测试时间空间）</p>
+<p>代码覆盖度越低，测试越不充分，但要做到很高的代码覆盖度，需要更多的测试用例，测试代价高。</p>
+<p>测试效果：路径覆盖 &gt; 分支覆盖 &gt; 语句覆盖</p>
+<p>测试难度：路径覆盖 &gt; 分支覆盖 &gt; 语句覆盖</p>
+<h2 id="两类测试">两类测试</h2>
+<ul>
+<li>黑盒测试：黑盒测试：用于检查代码的功能，不关心内部实现细节。检查程序是否符合规约</li>
+<li>白盒测试：要考虑内部实现细节，根据程序执行路径设计测试用例。一般比较早执行</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[ADT与OOP]]></title>
+        <id>https://guozixu2001.github.io/post/adt-yu-oop/</id>
+        <link href="https://guozixu2001.github.io/post/adt-yu-oop/">
+        </link>
+        <updated>2022-05-20T10:06:39.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="adt">ADT</h1>
+<p><strong>如何设计ADT？</strong><br>
+设计ADT：设计规约Spec-&gt;表示不变性Rep-&gt;实现Impl</p>
+<p><strong>规约Spec的写法：</strong></p>
+<ul>
+<li>方法注释</li>
+<li>@param 参数说明</li>
+<li>@return 返回值说明</li>
+<li>@throw 抛出异常</li>
+</ul>
+<p><strong>规约Spec的强度：</strong><br>
+前置条件越弱，规约强度越强；<br>
+后置条件越强，规约强度越强；<br>
+其他情况无法比较。<br>
+<strong>规约Spec的评价：</strong></p>
+<ul>
+<li>内聚的：一个好的规约Spec应该功能单一，易于理解；</li>
+<li>信息丰富的：不产生歧义；</li>
+<li>足够“强”的：使开发人员应该考虑足够多的异常情况并进行处理；</li>
+<li>足够“弱”的：为开发人员减轻工作负担并降低开发成本。</li>
+</ul>
+<p><strong>抽象函数AF：</strong><br>
+表示R(表示空间)和A(抽象空间)之间关系的一个映射<br>
+AF:R-&gt;A；</p>
+<p><strong>表示不变量RI：</strong><br>
+描述什么是合法的表示值，是所有表示值的一个子集。</p>
+<p><strong>ADT实现Impl(表示泄露)</strong><br>
+  通过防御式拷贝，给客户端返回一个全新的对象，即使客户端修改了数据，也不会影响自己。然而大量的拷贝会占用内存空间，因此很多时候会使用不可变数据类型以节省频繁复制的代价。</p>
+<p><strong>ADT测试Test</strong><br>
+  需要注意的是，由于测试时开发者也相当于用户，因此不能直接访问ADT内部的数据域，只能调用其他方法测试待测的方法。</p>
+<ul>
+<li>针对creater：构造对象后，用observer观察是否正确；</li>
+<li>针对observer：用其他方法构造对象，调用被测observer，观察判断结果是否正确；</li>
+<li>针对producer：produce一个新的对象，用observer观察结果是否正确。</li>
+</ul>
+<h1 id="oop">OOP</h1>
+<h2 id="基本概念">基本概念</h2>
+<p><strong>接口(Interface):</strong><br>
+接口之间可以继承与扩展；<br>
+一个类可以实现多个接口；<br>
+一个接口可以有多个实现类。</p>
+<p><strong>重写：</strong></p>
+<ul>
+<li>参数列表必须与父类完全相同；</li>
+<li>访问权限不能比父类中被重写的方法的访问权限更低；</li>
+<li>声明为 final 的方法不能被重写；</li>
+<li>构造方法不能被重写；</li>
+<li>当需要在子类中调用父类的被重写方法时，要使用 super 关键字。</li>
+</ul>
+<p><strong>多态：</strong><br>
+  多态是同一个行为具有多种不同表现形式或形态的能力，可以消除类型之间的耦合关系</p>
+<h1 id="adt和oop中的等价性">ADT和OOP中的等价性</h1>
+<h2 id="不可变对象">不可变对象</h2>
+<ul>
+<li>引用等价性与对象等价性<br>
+“==”是引用等价，即两个引用指向了相同的内存空间；<br>
+“equals()”是对象等价，即两个对象的域相同。</li>
+<li>如何判断两个不可变对象相等<br>
+如果AF映射到同样的结果则等价。在自定义ADT中，如果要判断等价，需要重写equals()方法和hashCode()方法。</li>
+</ul>
+<h2 id="可变对象">可变对象</h2>
+<p><strong>观察等价性与行为等价性：</strong></p>
+<ul>
+<li>观察等价性：在不改变状态的情况下，两个可变对象看起来是否一致；</li>
+<li>行为等价性：调用对象的任何方法表现出一致的结果。<br>
+  对可变数据类型，往往倾向于实现严格的观察等价性，但有些时候可能导致bud，甚至破坏RI。对于可变数据类型，无需重写equals()f方法和hashCode()方法，直接继承自Object即可，而如果一定要判断两个可变对象看起来是否一致，最好定义一个新的方法。</li>
+</ul>
+<p><strong>总结</strong><br>
+等价性应该是一种等价关系；<br>
+抽象函数AF是等价性的基础。</p>
 ]]></content>
     </entry>
     <entry>

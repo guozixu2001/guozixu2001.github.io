@@ -1,0 +1,262 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HIT软件构造复习（1、2章） | Rocco&#39;s Cache</title>
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654510361300">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="HIT软件构造复习（1、2章） | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="Multi-dimensional software views（软件构造中的多维视图）
+
+
+Moment维度关注于程序在某一时刻的表现，而Period关注的是程序在一段时间内的表现。
+
+
+Build-time维度关注程序还未被投入运行，编..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://guozixu2001.github.io/">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654510361300" alt="">
+  </a>
+  <h1 class="site-title">
+    Rocco&#39;s Cache
+  </h1>
+  <p class="site-description">
+    Rocco写东西的Cache
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              HIT软件构造复习（1、2章）
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-05-25
+              </span>
+              <span>
+                6 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="multi-dimensional-software-views软件构造中的多维视图">Multi-dimensional software views（软件构造中的多维视图）</h1>
+<ul>
+<li>
+<p>Moment维度关注于程序在某一时刻的表现，而Period关注的是程序在一段时间内的表现。</p>
+</li>
+<li>
+<p>Build-time维度关注程序还未被投入运行，编码阶段的表现，而Run-time维度更关注于程序运行时的表现；</p>
+</li>
+</ul>
+<p><strong>Note:</strong></p>
+<p>code-level view: functions \classes\methods\interfaces(代码逻辑组织）</p>
+<p>component-level view: file \directories\packages\libraries (代码物理组织）</p>
+<p>Static linking :库被拷贝进代码形成整体，执行的时候无需提供库文件（build time）<br>
+runtime views（runtime就是运行，程序被载入目标机器，开始执行。）</p>
+<p>以下是在各种视图（views）中的含义<br>
+code-level ：逻辑实体在内存中如何呈现？（in-memory states）<br>
+component-level ：物理实体在物理硬件环境中如何呈现？（physical environment）<br>
+moment：逻辑/物理实体在内存/硬件中特定时刻的形态。<br>
+period ：逻辑/物理实体在内存和/硬件中随时间如何变化。<br>
+dynamic linking :动态链接</p>
+<h1 id="视图之间的联系">视图之间的联系</h1>
+<p>①从无到有，写出了代码，就进入了Build-time维度，开始只是单个的没有任何联系的代码文件，所以是在moment+Code-level维度；</p>
+<p>②此时随着时间的推移，代码删删改改，就属于Period+Code-level了，而代码越写越多成为了一个包，甚至形成了一个库，于是就属于moment+Component-level维度了；</p>
+<p>③但是随着时间的推移，库文件由于需求的变化发生了变化，所以就属于Period+Component-level；</p>
+<p>④代码写好了，投入运行，进入Run-time维度，观察的如果是某一句代码的执行后结果，那就是moment+Code-level维度，但如果看的是代码执行的轨迹，那就是Period+Code-level维度，而如果看的是一个库文件的连接情况等，那就是moment+Component-level维度了；</p>
+<p>⑤如果看的是线程或进程的执行过程，也就是通过日志等手段查看一段时间内系统都做了什么事情，那么就是Period+Component-level了。</p>
+<h1 id="quality-objectives-of-software-construction外部质量与内部质量">Quality Objectives of Software Construction（外部质量与内部质量）</h1>
+<p>外部质量因素影响用户，内部质量因素影响软件本身和它的开发者，外部质量取决于内部质量。</p>
+<p><strong>外部质量的具体方面：</strong><br>
+（1）正确性（Correctness）：至高无上的质量指标，按照预先定义的“规约”执行。一个可用的软件一定是正确的，所以首要保证软件的正确性，其他的都可以做妥协、让步，但只有这一项不可妥协。<br>
+（2）健壮性（Robustness）:是对正确性的补充，即在出现“规约”定义之外的情形的时候，软件要做出恰当的反应，通俗地说就是出现异常时不要“崩溃”。<br>
+但软件的“正常”与“异常”是主观而非客观的，所谓的“异常”，取决于spec的范畴，那些未被“规约”覆盖的情况即为“异常情况”。<br>
+（3）可扩展性（Extendibility）<br>
+（4）可复用性（Reusability）<br>
+（5）兼容性（Compatibility）<br>
+（6）效率（Efficiency）<br>
+（7）可移植性（Portability）<br>
+（8）易用性（Easy of use）<br>
+（9）功能性（Functionality）</p>
+<p><strong>折中处理：</strong></p>
+<p>①正确的软件开发过程中，开发者应该将不同质量因素之间如何做出折中的设计决策和标准明确的写下来；</p>
+<p>②当某一项满足的足够好的时候有可能其他项的表现极差，此时需要做权衡，使得各部分的表现都较好，在某些特定要求下也可以放弃优化其他项而做到某一项的极致；</p>
+<p>③虽然需要折中，但“正确性”绝不能与其他质量因素折中。</p>
+<p><strong>五个关键的质量指标：</strong></p>
+<ul>
+<li>Elegant and beautiful code：代码要容易理解，通过统一变量/方法的命名标准、代码的风格、注释、包组织结构、必要时重构代码等方式让代码尽可能的容易理解。</li>
+<li>Design for/with reuse：ADT/OOP、接口、继承(Overload、Override)、多态、泛型、框架等技术可用于提高代码的可复用性。</li>
+<li>Low complexity：当复杂度较低的时候，代码就容易被扩展新的功能，所以要高内聚低耦合，遵从SOLID原则、OO设计模式、使用VCS控制代码版本</li>
+<li>Robustness and correctness：使用测试驱动的开发、异常处理、Assertion机制、防御式编程等技术保证程序的健壮性和正确性。</li>
+<li>Performance and efficiency：使用设计模式、并行/多线程等技术提升性能。</li>
+</ul>
+<h1 id="软件测试与测试优先编程">软件测试与测试优先编程</h1>
+<p><strong>测试：</strong><br>
+在规定的条件下对程序进行操作，以发现程序错误，衡量软件品质，并对其是否能满足设计要求进行评估的过程。</p>
+<p>①测试跟其他活动的目标相反：破坏、证错、“负能量”，即我们希望发现“错误”，要转变心态，用“让其出错”和“尽快出错”作为写高质量代码的日常法宝；</p>
+<p>②要认识到即使是再好的测试也不能保证程序里不存在错误</p>
+<p><strong>测试用例：</strong></p>
+<p>测试用例 = 输入+执行条件+结果</p>
+<p>最主要的方法——单元测试：针对软件的最小单元模型开展测试，隔离各个模块，容易定位错误和调试。</p>
+<p>基于等价类划分的测试：将被测函数的输入域划分为等价类，从等价类中导出测试用例。</p>
+<p>此外还要注意边界值分析方法的补充，即在进行等价类划分的时候，需要把边界也作为等价类之一加入考虑。</p>
+<p><strong>覆盖度：</strong></p>
+<ul>
+<li>
+<p>代码覆盖度<br>
+基于代码的测试覆盖评测测试过程中已经执行的代码的多少，与之相对的是要执行的剩余代码的多少。</p>
+</li>
+<li>
+<p>输入空间覆盖度<br>
+参照模块的规格说明，测试用例占总输入空间的比例。</p>
+</li>
+</ul>
+<p><strong>效率：</strong><br>
+成果（测试结果）/资源（测试时间空间）</p>
+<p>代码覆盖度越低，测试越不充分，但要做到很高的代码覆盖度，需要更多的测试用例，测试代价高。</p>
+<p>测试效果：路径覆盖 &gt; 分支覆盖 &gt; 语句覆盖</p>
+<p>测试难度：路径覆盖 &gt; 分支覆盖 &gt; 语句覆盖</p>
+<h2 id="两类测试">两类测试</h2>
+<ul>
+<li>黑盒测试：黑盒测试：用于检查代码的功能，不关心内部实现细节。检查程序是否符合规约</li>
+<li>白盒测试：要考虑内部实现细节，根据程序执行路径设计测试用例。一般比较早执行</li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#multi-dimensional-software-views%E8%BD%AF%E4%BB%B6%E6%9E%84%E9%80%A0%E4%B8%AD%E7%9A%84%E5%A4%9A%E7%BB%B4%E8%A7%86%E5%9B%BE">Multi-dimensional software views（软件构造中的多维视图）</a></li>
+<li><a href="#%E8%A7%86%E5%9B%BE%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB">视图之间的联系</a></li>
+<li><a href="#quality-objectives-of-software-construction%E5%A4%96%E9%83%A8%E8%B4%A8%E9%87%8F%E4%B8%8E%E5%86%85%E9%83%A8%E8%B4%A8%E9%87%8F">Quality Objectives of Software Construction（外部质量与内部质量）</a></li>
+<li><a href="#%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95%E4%B8%8E%E6%B5%8B%E8%AF%95%E4%BC%98%E5%85%88%E7%BC%96%E7%A8%8B">软件测试与测试优先编程</a>
+<ul>
+<li><a href="#%E4%B8%A4%E7%B1%BB%E6%B5%8B%E8%AF%95">两类测试</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://guozixu2001.github.io/post/adt-yu-oop/">
+              <h3 class="post-title">
+                ADT与OOP
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://guozixu2001.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

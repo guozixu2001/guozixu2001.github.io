@@ -1,0 +1,320 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HIT软件构造-面向复用的软件构造技术 | Rocco&#39;s Cache</title>
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654529834463">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="HIT软件构造-面向复用的软件构造技术 | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="Design reuseable class
+LSP原则
+子类型多态：用统一的方式处理不同类型的对象
+Animal a = new Animal();
+Animal c1 = new Cat();
+
+子类型方法参数：逆变，返回值：协变
+子类..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://guozixu2001.github.io/">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654529834463" alt="">
+  </a>
+  <h1 class="site-title">
+    Rocco&#39;s Cache
+  </h1>
+  <p class="site-description">
+    Rocco写东西的Cache
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              HIT软件构造-面向复用的软件构造技术
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-05-20
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://guozixu2001.github.io//post-images/hit-ruan-jian-gou-zao-mian-xiang-fu-yong-de-ruan-jian-gou-zao-ji-zhu.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="design-reuseable-class">Design reuseable class</h1>
+<p>LSP原则<br>
+子类型多态：用统一的方式处理不同类型的对象<br>
+Animal a = new Animal();<br>
+Animal c1 = new Cat();</p>
+<ul>
+<li>子类型方法参数：<strong>逆变</strong>，返回值：<strong>协变</strong></li>
+<li>子类型中重写的方法不能抛出额外的异常</li>
+<li>precondition不能强化</li>
+<li>post-condition不能弱化</li>
+<li>保持或者更强不变量</li>
+</ul>
+<pre><code class="language-java">class T {
+    Object a() {}
+}
+class S extends T {
+    @Override
+    String a() {}    
+}
+class T {
+    void b() throws Throwable {}
+}
+class S extends T {
+    @Override
+    void b() throws IOException {}
+}
+</code></pre>
+<p><strong>委托与继承的区别</strong></p>
+<ul>
+<li>继承：继承一个基类，添加新的方法或者重写原来的方法来实现某个功能</li>
+<li>委托：将某个功能的一部分直接委托给其它对象<br>
+委托能办到的，继承似乎都能办到，那么为什么不直接使用继承呢？</li>
+</ul>
+<p>譬如，如果子类只需要复用父类的一小部分方法，完全可以不需要继承，而是通过委托机制来实现，从而避免继承大量无用的方法</p>
+<p><strong>合成复用原则(CRP)</strong><br>
+内容：</p>
+<p>类应该通过它们的组合（通过包含实现所需功能的其他类的实例）而不是从基类或父类继承来实现多态的行为和代码重用<br>
+组合一个对象可以做什么(has_a 或 use_a)比扩展它是什么(is_a)更好<br>
+也就是说，组合要优先于继承（组合式委托的一种形式）</p>
+<p>注意：委托发生在对象的层面，而继承发生在类的层面</p>
+<p>那么为什么在对象层面更好呢？举个例子：</p>
+<p>Employee类有一个方法用于计算奖金：</p>
+<pre><code class="language-java">class Employee {
+    Money computeBonus() {... // default computation}
+}
+</code></pre>
+<p>它会有很多不同的子类，例如Manager,Programmer,Secretary，那么计算它们的奖金的时候肯定要重写方法：</p>
+<pre><code class="language-java">class Manager extends Employee {
+    @Override
+    Money computeBonus() {... // special computation}
+}
+</code></pre>
+<p>如果不同类型的manager需要不同的计算方式，那么就有需要引入子类：</p>
+<pre><code>class SeniorManager extends Manager {
+    @Override
+    Money computeBonus(){... // more special computation}
+}
+</code></pre>
+<p>如果要将某个人从Manager提升为SeniorManager，那么该怎么处理呢？</p>
+<p>核心问题在于：每个Employee对象的奖金计算方法都不同，这在对象层面而不是类层面</p>
+<p>显然，委托机制要更好，使用 CRP 原则的一种实现可以是：</p>
+<pre><code class="language-java">class Manager {
+    ManagerBonusCalculator mbc = new ManagerBonusCalculator();
+    Money computeBonus() {
+        return mbc.computeBonus();
+    }
+}
+
+class ManagerBonusCalculator {
+    Maney computeBonus {... // special computation}
+}
+```Cat c2 = new Cat();
+// a can be replaced by c1 and c2
+</code></pre>
+<p><strong>七点原则：</strong></p>
+<ul>
+<li>子类必须完全实现父类的方法（包括抽象类所有未实现的方法）</li>
+<li>但是，子类可以增加方法（猫既可以叫，也可以吃鱼）</li>
+<li>子类型方法参数：<strong>逆变</strong>，返回值：<strong>协变</strong></li>
+<li>子类型中重写的方法不能抛出额外的异常</li>
+<li>precondition不能强化</li>
+<li>post-condition不能弱化</li>
+<li>保持或者更强不变量</li>
+</ul>
+<pre><code class="language-java">class T {
+    Object a() {}
+}
+class S extends T {
+    @Override
+    String a() {}    
+}
+class T {
+    void b() throws Throwable {}
+}
+class S extends T {
+    @Override
+    void b() throws IOException {}
+}
+</code></pre>
+<p><strong>委托与继承的区别</strong></p>
+<ul>
+<li>继承：继承一个基类，添加新的方法或者重写原来的方法来实现某个功能</li>
+<li>委托：将某个功能的一部分直接委托给其它对象<br>
+委托能办到的，继承似乎都能办到，那么为什么不直接使用继承呢？</li>
+</ul>
+<p>譬如，如果子类只需要复用父类的一小部分方法，完全可以不需要继承，而是通过委托机制来实现，从而避免继承大量无用的方法</p>
+<p><strong>合成复用原则(CRP)</strong><br>
+内容：</p>
+<p>类应该通过它们的组合（通过包含实现所需功能的其他类的实例）而不是从基类或父类继承来实现多态的行为和代码重用<br>
+组合一个对象可以做什么(has_a 或 use_a)比扩展它是什么(is_a)更好<br>
+也就是说，组合要优先于继承（组合式委托的一种形式）</p>
+<p>注意：委托发生在对象的层面，而继承发生在类的层面</p>
+<p>那么为什么在对象层面更好呢？举个例子：</p>
+<p>Employee类有一个方法用于计算奖金：</p>
+<pre><code class="language-java">class Employee {
+    Money computeBonus() {... // default computation}
+}
+</code></pre>
+<p>它会有很多不同的子类，例如Manager,Programmer,Secretary，那么计算它们的奖金的时候肯定要重写方法：</p>
+<pre><code class="language-java">class Manager extends Employee {
+    @Override
+    Money computeBonus() {... // special computation}
+}
+</code></pre>
+<p>如果不同类型的manager需要不同的计算方式，那么就有需要引入子类：</p>
+<pre><code class="language-java">class SeniorManager extends Manager {
+    @Override
+    Money computeBonus(){... // more special computation}
+}
+</code></pre>
+<p>如果要将某个人从Manager提升为SeniorManager，那么该怎么处理呢？</p>
+<p>核心问题在于：每个Employee对象的奖金计算方法都不同，这在对象层面而不是类层面</p>
+<p>显然，委托机制要更好，使用 CRP 原则的一种实现可以是：</p>
+<pre><code class="language-java">class Manager {
+    ManagerBonusCalculator mbc = new ManagerBonusCalculator();
+    Money computeBonus() {
+        return mbc.computeBonus();
+    }
+}
+
+class ManagerBonusCalculator {
+    Maney computeBonus {... // special computation}
+}
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#design-reuseable-class">Design reuseable class</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://guozixu2001.github.io/post/adt-yu-oop/">
+              <h3 class="post-title">
+                ADT与OOP
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://guozixu2001.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

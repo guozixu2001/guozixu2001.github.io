@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ADT与OOP | Rocco&#39;s Cache</title>
-<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654510686849">
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654529834463">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="ADT与OOP | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
@@ -12,17 +12,11 @@
 
 
     <meta name="description" content="ADT
-如何设计ADT？
-设计ADT：设计规约Spec-&gt;表示不变性Rep-&gt;实现Impl
-规约Spec的写法：
+在认识ADT之前，首先我们来思考，什么是抽象？
+从抽象数据类型可以衍生出很多意思相近的名词，这里列出几个能表达其中思想的词：
 
-方法注释
-@param 参数说明
-@return 返回值说明
-@throw 抛出异常
-
-规约Spec的强度：
-前..." />
+抽象：忽略底层的细节而在更高层思考
+模块化：将系统分为一个个模块，每个模块可以单独地进行设计、实现、测试..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -32,7 +26,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://guozixu2001.github.io/">
-  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654510686849" alt="">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654529834463" alt="">
   </a>
   <h1 class="site-title">
     Rocco&#39;s Cache
@@ -92,17 +86,33 @@
                 2022-05-20
               </span>
               <span>
-                4 min read
+                5 min read
               </span>
               
             </div>
             
+              <img class="post-feature-image" src="https://guozixu2001.github.io//post-images/adt-yu-oop.jpg" alt="">
+            
             <div class="post-content-wrapper">
               <div class="post-content">
                 <h1 id="adt">ADT</h1>
+<p>在认识ADT之前，首先我们来思考，什么是抽象？<br>
+从抽象数据类型可以衍生出很多意思相近的名词，这里列出几个能表达其中思想的词：</p>
+<ul>
+<li>抽象：忽略底层的细节而在更高层思考</li>
+<li>模块化：将系统分为一个个模块，每个模块可以单独地进行设计、实现、测试、推导，并且在剩下的开发中进行复用</li>
+<li>封装：在模块外部建立起一道“围墙”，使它只对自己内部的行为负责，并且系统其它地方的代码不会影响到它的内部</li>
+<li>信息隐藏：将模块的实现细节隐藏，使未来更改模块内部时不必改变外部代码</li>
+<li>功能分离：一个模块仅仅负责一个特性/功能，而不是将一个特性运用在很多模块或一个模块拥有很多特性<br>
+<strong>更深入的理解</strong><br>
+抽象：规约使得使用者只需要弄懂规约并遵守前置条件，而不需要弄懂底层的代码实现模块化：单元测试和规约都帮助将方法模块化封装：方法中的局部变量都是被封装起来的，因为它们仅仅可以在方法内部使用。与此相对的是全局变量和指向可变对象的别名，它们会对封装带来很大损害信息隐藏：规约就是一种信息隐藏，它使得实现者可以自由地更改实现代码功能分离：一个规约应该是逻辑明确的，即它不能有很多特性，而应只需实现一种功能</li>
+</ul>
 <p><strong>如何设计ADT？</strong><br>
 设计ADT：设计规约Spec-&gt;表示不变性Rep-&gt;实现Impl</p>
 <p><strong>规约Spec的写法：</strong></p>
+<blockquote>
+<p>更相似的见下篇《设计规约》</p>
+</blockquote>
 <ul>
 <li>方法注释</li>
 <li>@param 参数说明</li>

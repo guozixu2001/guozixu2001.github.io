@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://guozixu2001.github.io/</id>
     <title>Rocco&apos;s Cache</title>
-    <updated>2022-06-06T15:55:47.962Z</updated>
+    <updated>2022-06-08T15:40:00.636Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://guozixu2001.github.io/"/>
     <link rel="self" href="https://guozixu2001.github.io/atom.xml"/>
@@ -60,7 +60,41 @@
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[浅谈Java中的设计模式]]></title>
+        <title type="html"><![CDATA[适配器模式和装饰器模式的区别]]></title>
+        <id>https://guozixu2001.github.io/post/shi-pei-qi-yu-zhuang-shi-qi/</id>
+        <link href="https://guozixu2001.github.io/post/shi-pei-qi-yu-zhuang-shi-qi/">
+        </link>
+        <updated>2022-06-02T15:25:23.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="区别">区别</h1>
+<p>装饰器与适配器都有一个别名叫做<strong>包装模式(Wrapper)</strong>，它们看似都是起到包装一个类或对象的作用，但是使用它们的目的很不一一样。</p>
+<ul>
+<li>适配器模式的意义是要将一个接口转变成另一个接口，它是通过<strong>改变接口</strong>来达到重复使用的目的。</li>
+<li>装饰器模式不是要改变被装饰对象的接口，而是恰恰要<strong>保持原有的接口</strong>，但是增强原有对象的功能，或者改变原有对象的处理方式而提升性能。所以这两个模式设计的目的是不同的。<br>
+<strong>Note:</strong> 两者都是基于 delegation</li>
+</ul>
+<h2 id="通俗的理解两种模式">通俗的理解两种模式</h2>
+<ul>
+<li>适配器模式是网线的转接口，把网线的接口包装成 type-c</li>
+<li>装饰器模式相当于，为了在奶茶中加料（烧仙草），创建了一个新的包装类（包装类即为烧仙草类）方便加料之后的计算。</li>
+</ul>
+<h1 id="java-io-中的装饰器模式">Java IO 中的装饰器模式</h1>
+<p>装饰器模式的作用就是赋予被装饰的类更多功能，在 java I/O 类库中有很多不同的功能组合情况，这些不同的功能组合都是使用了装饰器模式事项大的，下面以 <code>FilterInputStream</code> 为例介绍装饰器模式的使用。<br>
+<code>InputeStream</code> 类就是以抽象组件存在的：而 <code>FileInputStream</code> 就是具体组件，它实现了抽象组件的所有接口；<code>FilterInputStream</code> 类无疑就是装饰角色，它实现了 <code>InputStream</code> 类的所有接口，并且持有 <code>InputStream</code> 的对象实例的引用；<br>
+<code>BufferedInputStream</code> 是具体的装饰器实现者，它给 <code>InputStream</code> 类附加了功能，这个装饰器类的作用就是使得 <code>InputStream</code> 读取的数据保存在内存中，而提高读取的性能。与这个装饰器类有类似功能的还有 <code>LineNumberInputStream</code>（java 1.8 已经过期）类，它的作用就是提高行按行读取数据的功能，它们都是 <code>InputStream</code> 类增强了功能，或者提升了性能。</p>
+<h1 id="java-io-中的适配器模式">Java IO 中的适配器模式</h1>
+<p>适配器的作用就是将一个接口适配到另一个接口。在 JAVA 的 IO 类库中有很多这样的需求，如将字符串数据转变成字节数据保存到文件中，将字节数据转变成流数据等。下面以 <code>InputStreamReader</code> 和<code>OutputStreamWriter</code> 类为例介绍适配器模式。<br>
+<code>InputStreamReader</code> 和 <code>OutputStreamWrite</code>r 分别继承 <code>Reader</code> 和 <code>Writer</code> 两个抽象类，但是要创建它们的对象必须在构造函数中传入一个 <code>InputStream</code> 和 <code>OutputStream</code> 的实例。<code>InputStreamReader</code> 和 <code>OutputStreamWriter</code><br>
+也就是将 <code>InputStream</code> 和 <code>OutputStream</code> 适配到 <code>Reader</code> 和 <code>Writer</code> .</p>
+<h1 id="复习一下适配器模式">复习一下适配器模式</h1>
+<ul>
+<li>target（目标接口）:所要转换的所期待的接口</li>
+<li>Adaptee（源角色）：需要适配的类</li>
+<li>Adapter（适配器）：将源角色适配成目标接口，一般持有源接口的引用（或者继承源接口），且实现目标接口</li>
+</ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[设计模式的简单总结]]></title>
         <id>https://guozixu2001.github.io/post/qian-tan-java-zhong-de-she-ji-mo-shi/</id>
         <link href="https://guozixu2001.github.io/post/qian-tan-java-zhong-de-she-ji-mo-shi/">
         </link>

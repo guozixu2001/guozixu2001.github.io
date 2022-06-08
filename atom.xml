@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://guozixu2001.github.io/</id>
     <title>Rocco&apos;s Cache</title>
-    <updated>2022-06-08T15:46:47.859Z</updated>
+    <updated>2022-06-08T15:50:23.547Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://guozixu2001.github.io/"/>
     <link rel="self" href="https://guozixu2001.github.io/atom.xml"/>
@@ -77,6 +77,72 @@
 <li>适配器模式是网线的转接口，把网线的接口包装成 type-c</li>
 <li>装饰器模式相当于，为了在奶茶中加料（烧仙草），创建了一个新的包装类（包装类即为烧仙草类）方便加料之后的计算。</li>
 </ul>
+<h3 id="装饰器模式代码">装饰器模式代码</h3>
+<pre><code class="language-java">public class MyClass {
+    public static void main(String args[]) {
+        int totalCost = new Boba(new Coffee()).cost();
+        System.out.println(totalCost);
+    }
+}
+
+interface Beverage {
+    public int cost();
+}
+
+class Coffee implements Beverage {
+    private int price = 2;
+    @Override
+    public int cost() {
+        return this.price; 
+    }
+    
+}
+
+class Boba implements Beverage {
+    private int price = 1;
+    private Beverage beverage;
+    
+    public Boba(Beverage beverage) {
+        this.beverage = beverage;
+    }
+    
+    @Override
+    public int cost() {
+        return this.price + beverage.cost();
+    }
+}
+</code></pre>
+<h3 id="适配器模式代码">适配器模式代码</h3>
+<pre><code class="language-java">public class MyClass {
+    public static void main(String args[]) {
+        Computer computer = new Computer();
+        computer.makeSounds(new Adapter(new Speaker()));
+    }
+}
+
+class Speaker {
+    public void makeSounds() {
+        System.out.println(&quot;lalalla&quot;);
+    }
+}
+
+class Adapter {
+    private Speaker speaker;
+    public Adapter(Speaker spkr) {
+        this.speaker = spkr;
+    }
+    
+    public void makeSounds() {
+        speaker.makeSounds();
+    }
+}
+
+class Computer {
+    public void makeSounds(Adapter adapter) {
+        adapter.makeSounds();
+    }
+}
+</code></pre>
 <h1 id="java-io-中的装饰器模式">Java IO 中的装饰器模式</h1>
 <p>装饰器模式的作用就是赋予被装饰的类更多功能，在 java I/O 类库中有很多不同的功能组合情况，这些不同的功能组合都是使用了装饰器模式事项大的，下面以 <code>FilterInputStream</code> 为例介绍装饰器模式的使用。<br>
 <code>InputeStream</code> 类就是以抽象组件存在的：而 <code>FileInputStream</code> 就是具体组件，它实现了抽象组件的所有接口；<code>FilterInputStream</code> 类无疑就是装饰角色，它实现了 <code>InputStream</code> 类的所有接口，并且持有 <code>InputStream</code> 的对象实例的引用；<br>

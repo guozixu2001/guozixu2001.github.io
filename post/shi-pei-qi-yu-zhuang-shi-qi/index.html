@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>适配器模式和装饰器模式的区别 | Rocco&#39;s Cache</title>
-<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654703169905">
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654703420168">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="适配器模式和装饰器模式的区别 | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
@@ -25,7 +25,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://guozixu2001.github.io/">
-  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654703169905" alt="">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654703420168" alt="">
   </a>
   <h1 class="site-title">
     Rocco&#39;s Cache
@@ -85,7 +85,7 @@
                 2022-06-02
               </span>
               <span>
-                3 min read
+                4 min read
               </span>
               
                 <a href="https://guozixu2001.github.io/tag/h0ub4yJc9/" class="post-tag">
@@ -110,6 +110,72 @@
 <li>适配器模式是网线的转接口，把网线的接口包装成 type-c</li>
 <li>装饰器模式相当于，为了在奶茶中加料（烧仙草），创建了一个新的包装类（包装类即为烧仙草类）方便加料之后的计算。</li>
 </ul>
+<h3 id="装饰器模式代码">装饰器模式代码</h3>
+<pre><code class="language-java">public class MyClass {
+    public static void main(String args[]) {
+        int totalCost = new Boba(new Coffee()).cost();
+        System.out.println(totalCost);
+    }
+}
+
+interface Beverage {
+    public int cost();
+}
+
+class Coffee implements Beverage {
+    private int price = 2;
+    @Override
+    public int cost() {
+        return this.price; 
+    }
+    
+}
+
+class Boba implements Beverage {
+    private int price = 1;
+    private Beverage beverage;
+    
+    public Boba(Beverage beverage) {
+        this.beverage = beverage;
+    }
+    
+    @Override
+    public int cost() {
+        return this.price + beverage.cost();
+    }
+}
+</code></pre>
+<h3 id="适配器模式代码">适配器模式代码</h3>
+<pre><code class="language-java">public class MyClass {
+    public static void main(String args[]) {
+        Computer computer = new Computer();
+        computer.makeSounds(new Adapter(new Speaker()));
+    }
+}
+
+class Speaker {
+    public void makeSounds() {
+        System.out.println(&quot;lalalla&quot;);
+    }
+}
+
+class Adapter {
+    private Speaker speaker;
+    public Adapter(Speaker spkr) {
+        this.speaker = spkr;
+    }
+    
+    public void makeSounds() {
+        speaker.makeSounds();
+    }
+}
+
+class Computer {
+    public void makeSounds(Adapter adapter) {
+        adapter.makeSounds();
+    }
+}
+</code></pre>
 <h1 id="java-io-中的装饰器模式">Java IO 中的装饰器模式</h1>
 <p>装饰器模式的作用就是赋予被装饰的类更多功能，在 java I/O 类库中有很多不同的功能组合情况，这些不同的功能组合都是使用了装饰器模式事项大的，下面以 <code>FilterInputStream</code> 为例介绍装饰器模式的使用。<br>
 <code>InputeStream</code> 类就是以抽象组件存在的：而 <code>FileInputStream</code> 就是具体组件，它实现了抽象组件的所有接口；<code>FilterInputStream</code> 类无疑就是装饰角色，它实现了 <code>InputStream</code> 类的所有接口，并且持有 <code>InputStream</code> 的对象实例的引用；<br>
@@ -130,7 +196,12 @@
                 <ul class="markdownIt-TOC">
 <li><a href="#%E5%8C%BA%E5%88%AB">区别</a>
 <ul>
-<li><a href="#%E9%80%9A%E4%BF%97%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F">通俗的理解两种模式</a></li>
+<li><a href="#%E9%80%9A%E4%BF%97%E7%9A%84%E7%90%86%E8%A7%A3%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F">通俗的理解两种模式</a>
+<ul>
+<li><a href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%E4%BB%A3%E7%A0%81">装饰器模式代码</a></li>
+<li><a href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%E4%BB%A3%E7%A0%81">适配器模式代码</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#java-io-%E4%B8%AD%E7%9A%84%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F">Java IO 中的装饰器模式</a></li>

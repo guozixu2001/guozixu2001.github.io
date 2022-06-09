@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Java中的函数返回值是lvalue(左值引用)吗？ | Rocco&#39;s Cache</title>
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654771147108">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Java中的函数返回值是lvalue(左值引用)吗？ | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="C++中的返回值
+在C++中，我们经常可以做
+get(array, 5) = 5;
+
+// get() definition
+int &amp; get(int * array, int index) {
+    return array[..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://guozixu2001.github.io/">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654771147108" alt="">
+  </a>
+  <h1 class="site-title">
+    Rocco&#39;s Cache
+  </h1>
+  <p class="site-description">
+    Rocco写东西的Cache
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Java中的函数返回值是lvalue(左值引用)吗？
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-05-02
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://guozixu2001.github.io//post-images/java-zhong-de-han-shu-fan-hui-zhi-shi-lvaluezuo-zhi-yin-yong-ma.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="c中的返回值">C++中的返回值</h1>
+<p>在C++中，我们经常可以做</p>
+<pre><code class="language-c++">get(array, 5) = 5;
+
+// get() definition
+int &amp; get(int * array, int index) {
+    return array[index];
+}
+</code></pre>
+<h1 id="那么在java中我们可以这样做吗">那么，在Java中我们可以这样做吗？</h1>
+<p>不可以。<br>
+在Java中，我们可以这样做：</p>
+<pre><code class="language-java">getObject().setX(someNumber);
+</code></pre>
+<p>但是不可以这样做：</p>
+<pre><code class="language-java">getObject().getX() = someNumber;   // get() return copy of the var
+</code></pre>
+<p><strong>Stack Overflow上的解释：</strong><br>
+Because method getX() (and any method that does not return void) always returns value type (when returning Object it is its address, when returning literal it's just this literal's value).</p>
+<p>If you want to write performance-optimized code in Java - first write, then measure, and then eventually tune it (if measurement step says it's slow). JVM has enough optimalizations to make your code as fastest as possible, you don't have to optimize code too early.</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#c%E4%B8%AD%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC">C++中的返回值</a></li>
+<li><a href="#%E9%82%A3%E4%B9%88%E5%9C%A8java%E4%B8%AD%E6%88%91%E4%BB%AC%E5%8F%AF%E4%BB%A5%E8%BF%99%E6%A0%B7%E5%81%9A%E5%90%97">那么，在Java中我们可以这样做吗？</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://guozixu2001.github.io/post/adt-yu-oop/">
+              <h3 class="post-title">
+                ADT与OOP
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://guozixu2001.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

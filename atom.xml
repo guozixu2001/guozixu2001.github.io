@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://guozixu2001.github.io/</id>
     <title>Rocco&apos;s Cache</title>
-    <updated>2022-06-09T10:39:11.032Z</updated>
+    <updated>2022-06-09T12:47:02.498Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://guozixu2001.github.io/"/>
     <link rel="self" href="https://guozixu2001.github.io/atom.xml"/>
@@ -223,6 +223,105 @@ class Computer {
 <li>迪米特法则（最少知道原则）（Demeter Principle）:一个实体应当尽量少的与其他实体之间发生相互作用，使得系统功能模块相对独立。</li>
 <li>合成复用原则（Composite Reuse Principle）:原则是尽量使用合成/聚合的方式，而不是使用继承。继承实际上破坏了类的封装性，超类的方法可能会被子类修改。</li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[如何正确的从List中删除元素(Java)？]]></title>
+        <id>https://guozixu2001.github.io/post/ru-he-zheng-que-de-cong-list-zhong-shan-chu-yuan-su-java/</id>
+        <link href="https://guozixu2001.github.io/post/ru-he-zheng-que-de-cong-list-zhong-shan-chu-yuan-su-java/">
+        </link>
+        <updated>2022-05-22T12:39:58.000Z</updated>
+        <content type="html"><![CDATA[<p>遍历删除List中符合条件的元素主要有以下几种方法：</p>
+<p>1.普通for循环 2.增强for循环 foreach 3.迭代器iterator 4.removeIf 和 方法引用 (一行代码搞定) 其中使用普通for循环容易造成遗漏元素的问题，增强for循环foreach会报java.util.ConcurrentModificationException并发修改异常。<br>
+所以推荐使用迭代器iterator，或者JDK1.8以上使用lambda表达式进行List的遍历删除元素操作。</p>
+<p>以下是上述几种方法的具体分析：</p>
+<h1 id="普通for循环">普通for循环</h1>
+<pre><code class="language-java">/** 
+ * 普通for循环遍历删除元素
+ */  
+    List&lt;Student&gt; students = this.getStudents();  
+    for (int i=0; i&lt;students.size(); i++) {  
+        if (students.get(i).getId()%3 == 0) {  
+            Student student = students.get(i);  
+            students.remove(student);  
+        }  
+    }
+</code></pre>
+<p>由于在循环中删除元素后，list的索引会自动变化，list.size()获取到的list长度也会实时更新，所以会造成漏掉被删除元素后一个索引的元素。</p>
+<p>比如循环到第2个元素时你把它删了，接下来去访问第3个元素，实际上访问到的是原来list的第4个元素，因为原来的第3个元素变成了现在的第2个元素。这样就造成了元素的遗漏。</p>
+<h1 id="增强for循环-foreach">增强for循环 foreach</h1>
+<pre><code class="language-java">/**
+ * 增强for循环遍历删除元素
+ */
+    List&lt;Student&gt; students = this.getStudents();  
+    for (Student stu : students) {  
+        if (stu.getId() == 2)   
+            students.remove(stu);  
+    }
+</code></pre>
+<p>使用foreach遍历循环删除符合条件的元素，不会出现普通for循环的遗漏元素问题，但是会产生  <code>java.util.ConcurrentModificationException</code> 并发修改异常的错误。</p>
+<p>报 <code>ConcurrentModificationException</code> 错误的原因：</p>
+<p>先来看一下JDK源码中ArrayList的remove源码是怎么实现的：</p>
+<pre><code class="language-java">public boolean remove(Object o) {
+        if (o == null) {
+            for (int index = 0; index &lt; size; index++)
+                if (elementData[index] == null) {
+                    fastRemove(index);
+                    return true;
+                }
+        } else {
+            for (int index = 0; index &lt; size; index++)
+                if (o.equals(elementData[index])) {
+                    fastRemove(index);
+                    return true;
+                }
+        }
+        return false;
+    }
+</code></pre>
+<p>一般情况下程序的执行路径会走到else路径下最终调用fastRemove方法：</p>
+<pre><code class="language-java">private void fastRemove(int index) {
+        modCount++;
+        int numMoved = size - index - 1;
+        if (numMoved &gt; 0)
+            System.arraycopy(elementData, index+1, elementData, index,
+                             numMoved);
+        elementData[--size] = null; // clear to let GC do its work
+    }
+</code></pre>
+<p>在fastRemove方法中，可以看到第2行把modCount变量的值加一，但在ArrayList返回的迭代器会做迭代器内部的修改次数检查：</p>
+<pre><code class="language-java">final void checkForComodification() {
+         if (modCount != expectedModCount)
+             throw new ConcurrentModificationException();
+     }
+</code></pre>
+<p>而foreach写法是对实际的Iterable、hasNext、next方法的简写，因为上面的remove(Object)方法修改了modCount的值，所以才会报出并发修改异常。</p>
+<p>要避免这种情况的出现则在使用迭代器迭代时（显式或for-each的隐式）不要使用List的remove，改为用Iterator的remove即可。</p>
+<h1 id="迭代器iterator">迭代器iterator</h1>
+<pre><code class="language-java">/**
+ *  迭代器iterator
+ */
+     List&lt;Student&gt; students = this.getStudents();  
+     System.out.println(students);  
+     Iterator&lt;Student&gt; iterator = students.iterator();  
+     while (iterator .hasNext()) {  
+         Student student = iterator .next();  
+         if (iterator.getId() % 2 == 0)  
+             iterator.remove();//这里要使用Iterator的remove方法移除当前对象，如果使用List的remove方法，则同样会出现ConcurrentModificationException  
+     }
+</code></pre>
+<p>由上述foreach报错的原因，注意要使用迭代器的remove方法，而不是List的remove方法。</p>
+<h1 id="removeif-和-方法引用">removeIf 和 方法引用</h1>
+<p>在JDK1.8中，Collection以及其子类新加入了removeIf方法，作用是按照一定规则过滤集合中的元素。</p>
+<p>方法引用是也是JDK1.8的新特性之一。方法引用通过方法的名字来指向一个方法，使用一对冒号 :: 来完成对方法的调用，可以使语言的构造更紧凑简洁，减少冗余代码。</p>
+<p>使用removeIf和方法引用删除List中符合条件的元素：</p>
+<pre><code class="language-java">List&lt;String&gt; urls = this.getUrls();  
+
+// 使用方法引用删除urls中值为&quot;null&quot;的元素
+urls.removeIf(&quot;null&quot;::equals);
+</code></pre>
+<p>作为removeIf的条件，为true时就删除元素。</p>
+<p>使用removeIf 和 方法引用，可以将原本需要七八行的代码，缩减到一行即可完成，使代码的构造更紧凑简洁，减少冗余代码。</p>
 ]]></content>
     </entry>
     <entry>
@@ -741,24 +840,6 @@ s = s.concat(&quot;d&quot;); // create a new String Object with content &quot;ab
 <li>final变量无法改变引用，但是“盒子”中的值还是可以改变的</li>
 <li>finial method 无法被子类重写</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[关于]]></title>
-        <id>https://guozixu2001.github.io/post/about/</id>
-        <link href="https://guozixu2001.github.io/post/about/">
-        </link>
-        <updated>2020-01-25T11:09:48.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="很高兴遇见你">很高兴遇见你！🤝</h2>
-<blockquote>
-<p>Programming machines to do web and graphics stuff.<br>
-Lifelong learner, book lover.<br>
-Interested in accessibility and all kinds of things.</p>
-</blockquote>
-<h2 id="联系我呀">📬 联系我呀</h2>
-<blockquote>
-<p>guozixu2001@gmail.com</p>
-</blockquote>
 ]]></content>
     </entry>
 </feed>

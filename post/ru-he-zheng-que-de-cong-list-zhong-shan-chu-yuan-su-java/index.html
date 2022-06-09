@@ -1,0 +1,264 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>如何正确的从List中删除元素(Java)？ | Rocco&#39;s Cache</title>
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654778811417">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="如何正确的从List中删除元素(Java)？ | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="遍历删除List中符合条件的元素主要有以下几种方法：
+1.普通for循环 2.增强for循环 foreach 3.迭代器iterator 4.removeIf 和 方法引用 (一行代码搞定) 其中使用普通for循环容易造成遗漏元素的问题，增..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://guozixu2001.github.io/">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654778811417" alt="">
+  </a>
+  <h1 class="site-title">
+    Rocco&#39;s Cache
+  </h1>
+  <p class="site-description">
+    Rocco写东西的Cache
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              如何正确的从List中删除元素(Java)？
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-05-22
+              </span>
+              <span>
+                4 min read
+              </span>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://guozixu2001.github.io//post-images/ru-he-zheng-que-de-cong-list-zhong-shan-chu-yuan-su-java.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>遍历删除List中符合条件的元素主要有以下几种方法：</p>
+<p>1.普通for循环 2.增强for循环 foreach 3.迭代器iterator 4.removeIf 和 方法引用 (一行代码搞定) 其中使用普通for循环容易造成遗漏元素的问题，增强for循环foreach会报java.util.ConcurrentModificationException并发修改异常。<br>
+所以推荐使用迭代器iterator，或者JDK1.8以上使用lambda表达式进行List的遍历删除元素操作。</p>
+<p>以下是上述几种方法的具体分析：</p>
+<h1 id="普通for循环">普通for循环</h1>
+<pre><code class="language-java">/** 
+ * 普通for循环遍历删除元素
+ */  
+    List&lt;Student&gt; students = this.getStudents();  
+    for (int i=0; i&lt;students.size(); i++) {  
+        if (students.get(i).getId()%3 == 0) {  
+            Student student = students.get(i);  
+            students.remove(student);  
+        }  
+    }
+</code></pre>
+<p>由于在循环中删除元素后，list的索引会自动变化，list.size()获取到的list长度也会实时更新，所以会造成漏掉被删除元素后一个索引的元素。</p>
+<p>比如循环到第2个元素时你把它删了，接下来去访问第3个元素，实际上访问到的是原来list的第4个元素，因为原来的第3个元素变成了现在的第2个元素。这样就造成了元素的遗漏。</p>
+<h1 id="增强for循环-foreach">增强for循环 foreach</h1>
+<pre><code class="language-java">/**
+ * 增强for循环遍历删除元素
+ */
+    List&lt;Student&gt; students = this.getStudents();  
+    for (Student stu : students) {  
+        if (stu.getId() == 2)   
+            students.remove(stu);  
+    }
+</code></pre>
+<p>使用foreach遍历循环删除符合条件的元素，不会出现普通for循环的遗漏元素问题，但是会产生  <code>java.util.ConcurrentModificationException</code> 并发修改异常的错误。</p>
+<p>报 <code>ConcurrentModificationException</code> 错误的原因：</p>
+<p>先来看一下JDK源码中ArrayList的remove源码是怎么实现的：</p>
+<pre><code class="language-java">public boolean remove(Object o) {
+        if (o == null) {
+            for (int index = 0; index &lt; size; index++)
+                if (elementData[index] == null) {
+                    fastRemove(index);
+                    return true;
+                }
+        } else {
+            for (int index = 0; index &lt; size; index++)
+                if (o.equals(elementData[index])) {
+                    fastRemove(index);
+                    return true;
+                }
+        }
+        return false;
+    }
+</code></pre>
+<p>一般情况下程序的执行路径会走到else路径下最终调用fastRemove方法：</p>
+<pre><code class="language-java">private void fastRemove(int index) {
+        modCount++;
+        int numMoved = size - index - 1;
+        if (numMoved &gt; 0)
+            System.arraycopy(elementData, index+1, elementData, index,
+                             numMoved);
+        elementData[--size] = null; // clear to let GC do its work
+    }
+</code></pre>
+<p>在fastRemove方法中，可以看到第2行把modCount变量的值加一，但在ArrayList返回的迭代器会做迭代器内部的修改次数检查：</p>
+<pre><code class="language-java">final void checkForComodification() {
+         if (modCount != expectedModCount)
+             throw new ConcurrentModificationException();
+     }
+</code></pre>
+<p>而foreach写法是对实际的Iterable、hasNext、next方法的简写，因为上面的remove(Object)方法修改了modCount的值，所以才会报出并发修改异常。</p>
+<p>要避免这种情况的出现则在使用迭代器迭代时（显式或for-each的隐式）不要使用List的remove，改为用Iterator的remove即可。</p>
+<h1 id="迭代器iterator">迭代器iterator</h1>
+<pre><code class="language-java">/**
+ *  迭代器iterator
+ */
+     List&lt;Student&gt; students = this.getStudents();  
+     System.out.println(students);  
+     Iterator&lt;Student&gt; iterator = students.iterator();  
+     while (iterator .hasNext()) {  
+         Student student = iterator .next();  
+         if (iterator.getId() % 2 == 0)  
+             iterator.remove();//这里要使用Iterator的remove方法移除当前对象，如果使用List的remove方法，则同样会出现ConcurrentModificationException  
+     }
+</code></pre>
+<p>由上述foreach报错的原因，注意要使用迭代器的remove方法，而不是List的remove方法。</p>
+<h1 id="removeif-和-方法引用">removeIf 和 方法引用</h1>
+<p>在JDK1.8中，Collection以及其子类新加入了removeIf方法，作用是按照一定规则过滤集合中的元素。</p>
+<p>方法引用是也是JDK1.8的新特性之一。方法引用通过方法的名字来指向一个方法，使用一对冒号 :: 来完成对方法的调用，可以使语言的构造更紧凑简洁，减少冗余代码。</p>
+<p>使用removeIf和方法引用删除List中符合条件的元素：</p>
+<pre><code class="language-java">List&lt;String&gt; urls = this.getUrls();  
+
+// 使用方法引用删除urls中值为&quot;null&quot;的元素
+urls.removeIf(&quot;null&quot;::equals);
+</code></pre>
+<p>作为removeIf的条件，为true时就删除元素。</p>
+<p>使用removeIf 和 方法引用，可以将原本需要七八行的代码，缩减到一行即可完成，使代码的构造更紧凑简洁，减少冗余代码。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E6%99%AE%E9%80%9Afor%E5%BE%AA%E7%8E%AF">普通for循环</a></li>
+<li><a href="#%E5%A2%9E%E5%BC%BAfor%E5%BE%AA%E7%8E%AF-foreach">增强for循环 foreach</a></li>
+<li><a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8iterator">迭代器iterator</a></li>
+<li><a href="#removeif-%E5%92%8C-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8">removeIf 和 方法引用</a></li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://guozixu2001.github.io/post/hit-ruan-jian-gou-zao-mian-xiang-fu-yong-de-ruan-jian-gou-zao-ji-zhu/">
+              <h3 class="post-title">
+                HIT软件构造-面向复用的软件构造技术
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://guozixu2001.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

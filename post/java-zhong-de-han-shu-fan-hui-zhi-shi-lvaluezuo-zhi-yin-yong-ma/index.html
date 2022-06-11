@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Java中的函数返回值是lvalue(左值引用)吗？ | Rocco&#39;s Cache</title>
-<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654778811417">
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654965474753">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="Java中的函数返回值是lvalue(左值引用)吗？ | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
@@ -27,7 +27,7 @@ int &amp; get(int * array, int index) {
       <div class="main-content">
         <div class="site-header">
   <a href="https://guozixu2001.github.io/">
-  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654778811417" alt="">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654965474753" alt="">
   </a>
   <h1 class="site-title">
     Rocco&#39;s Cache
@@ -116,6 +116,7 @@ int &amp; get(int * array, int index) {
 <p><strong>Stack Overflow上的解释：</strong><br>
 Because method getX() (and any method that does not return void) always returns value type (when returning Object it is its address, when returning literal it's just this literal's value).</p>
 <p>If you want to write performance-optimized code in Java - first write, then measure, and then eventually tune it (if measurement step says it's slow). JVM has enough optimalizations to make your code as fastest as possible, you don't have to optimize code too early.</p>
+<p>.....还没有完全把这个问题搞懂，猜测可能和返回的值是 primitive type 还是 object type 有关</p>
 
               </div>
               <div class="toc-container">

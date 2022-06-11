@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://guozixu2001.github.io/</id>
     <title>Rocco&apos;s Cache</title>
-    <updated>2022-06-09T12:47:02.498Z</updated>
+    <updated>2022-06-11T16:37:57.722Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://guozixu2001.github.io/"/>
     <link rel="self" href="https://guozixu2001.github.io/atom.xml"/>
@@ -223,6 +223,67 @@ class Computer {
 <li>迪米特法则（最少知道原则）（Demeter Principle）:一个实体应当尽量少的与其他实体之间发生相互作用，使得系统功能模块相对独立。</li>
 <li>合成复用原则（Composite Reuse Principle）:原则是尽量使用合成/聚合的方式，而不是使用继承。继承实际上破坏了类的封装性，超类的方法可能会被子类修改。</li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[SOLID原则]]></title>
+        <id>https://guozixu2001.github.io/post/solid-yuan-ze/</id>
+        <link href="https://guozixu2001.github.io/post/solid-yuan-ze/">
+        </link>
+        <updated>2022-05-25T15:53:38.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="为什么需要solid原则">为什么需要SOLID原则？</h1>
+<p>无论是软件系统设计，还是代码实现，遵循有效和明确的设计原则，都利于系统软件灵活可靠，安全快速的落地，更重要的是能灵活地应对需求，简化系统扩展和维护，避免无效的编码。</p>
+<h1 id="单一职责srp">单一职责（SRP）</h1>
+<blockquote>
+<p>single reponsibility priciple</p>
+</blockquote>
+<h2 id="相关设计模式">相关设计模式</h2>
+<p>面对违背单一职责原则的程序代码，我们可以利用外观模式，代理模式，桥接模式，适配器模式，命令模式对已有设计进行重构，实现多职责的分离。</p>
+<h2 id="简单的应用场景">简单的应用场景</h2>
+<p>只要做过项目，肯定要接触到用户、机构、角色管理这些模块，基本上使用的都是RBAC模型（Role-Based Access Control，基于角色的访问控制，通过分配和取消角色来完成用户权限的授予和取消，使动作主体（用户）与资源的行为（权限）分离），确实是一个很好的解决办法。我们这里要讲的是用户管理、修改用户的信息、增加机构（一个人属于多个机构）、增加角色等，用户有这么多的信息和行为要维护，我们就把这些写到一个接口中。<br>
+<img src="https://guozixu2001.github.io//post-images/1654963348022.png" alt="" loading="lazy"><br>
+但是这样的设计不是很好的设计，应该把用户的信息抽取成一个BO（Business Object，业务对象），把行为抽取成一个Biz（Business Logic，业务逻辑），按照这个思路对类图进行修正。<br>
+<img src="https://guozixu2001.github.io//post-images/1654963398863.png" alt="" loading="lazy"><br>
+以上把一个接口拆分成两个接口的动作，就符合单一职责原则：有且只有一个原因引起类的变更。</p>
+<h1 id="开闭原则ocp">开闭原则（OCP）</h1>
+<p>开闭原则 (OCP) 英文全称为 Open-Closed Principle，基本定义是软件中的对象（类，模块，函数等）应该对于扩展是开放的，但是对于修改是封闭的。这里的对扩展开放表示这添加新的代码，就可以让程序行为扩展来满足需求的变化；对修改封闭表示在扩展程序行为时不要修改已有的代码，进而避免影响原有的功能。</p>
+<h2 id="应用场景">应用场景</h2>
+<p>有一个用于图表显示的 Display 类，它能绘制各种类型的图表，比如饼状图，柱状图等；而需要绘制特定图表时，都强依赖了对应类型的图表，Display 类的内部实现如下：</p>
+<pre><code class="language-java">public void display(String type) {
+    if (type.equals(&quot;pie&quot;)) {  
+      PieChart chart = new PieChart();  
+      chart.display();  
+    }  else if (type.equals(&quot;bar&quot;)) {  
+      BarChart chart = new BarChart();  
+      chart.display();  
+    } 
+}
+</code></pre>
+<p>基于上述的代码，如果需要新增一个图表，比如折线图 LineChart ，就要修改 Display 类的 display() 方法，增加新增的判断逻辑，很显然这样的做法违反开闭原则。而让类的实现符合开闭原则的方式就是引入抽象图表类 AbstractChart，作为其他图表的基类，让 Display 依赖这个抽象图表类 AbstractChart，然后通过 Display 决定使用哪种具体的图表类，实现代码变成了这样：</p>
+<pre><code class="language-java">private Abstractchart chart;
+
+public void display() {
+    chart.display();  
+}
+</code></pre>
+<p>现在我们需要新增折线图显示，在客户端向 Display 中注入一个 LineChart 对象即可，无须修改现有类库的源代码。</p>
+<h2 id="相关的设计模式">相关的设计模式</h2>
+<p>可以用到的设计模式有很多，比如工厂模式，观察者模式，模板方法模式，策略模式，组合模式，使用相关设计模式的关键点就是识别出最有可能变化和扩展的部分，然后构造抽象来隔离这些变化。</p>
+<h1 id="里式替换原则-lsp">里式替换原则 (LSP)</h1>
+<h2 id="基本概念">基本概念</h2>
+<p>里式替换原则 (LSP) 英文全称为 Liskov Substitution Principle，基本定义为：在不影响程序正确性的基础上，所有使用基类的地方都能<strong>使用其子类的对象</strong>来替换。这里提到的基类和子类说的就是具有继承关系的两类对象，当我们传递一个子类型对象时，需要保证程序不会改变任何原基类的行为和状态，程序能正常运作。</p>
+<h2 id="原则">原则</h2>
+<ul>
+<li>子类可以实现父类的抽象方法，但不能覆盖父类的非抽象方法</li>
+<li>子类可以有自己的个性</li>
+<li>子类型中重写的方法必须有相同或子类型的<strong>返回值</strong>或者符合co-variant的参数</li>
+<li>子类型中重写的方法必须使用同样类型的<strong>参数</strong>或者符合contra-variant的参数(此种情况Java目<br>
+前按照重载overload处理)</li>
+<li>子类型重写的方法不能有额外的异常</li>
+</ul>
+<h1 id="接口隔离原则-isp">接口隔离原则 (ISP)</h1>
+<h2 id="基本概念-2">基本概念</h2>
+<p>接口隔离原则 (ISP) 英文全称为 Interface Segregation Principle，基本定义：客户端不应该依赖那些它不需要的接口。客户端应该只依赖它实际使用的方法，因为如果一个接口具备了若干个方法，那就意味着它的实现类都要实现所有接口方法，从代码结构上就十分臃肿</p>
 ]]></content>
     </entry>
     <entry>
@@ -723,6 +784,7 @@ int &amp; get(int * array, int index) {
 <p><strong>Stack Overflow上的解释：</strong><br>
 Because method getX() (and any method that does not return void) always returns value type (when returning Object it is its address, when returning literal it's just this literal's value).</p>
 <p>If you want to write performance-optimized code in Java - first write, then measure, and then eventually tune it (if measurement step says it's slow). JVM has enough optimalizations to make your code as fastest as possible, you don't have to optimize code too early.</p>
+<p>.....还没有完全把这个问题搞懂，猜测可能和返回的值是 primitive type 还是 object type 有关</p>
 ]]></content>
     </entry>
     <entry>
@@ -815,31 +877,6 @@ AF:R-&gt;A；</p>
 <p><strong>总结</strong><br>
 等价性应该是一种等价关系；<br>
 抽象函数AF是等价性的基础。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[immutable & mutable type]]></title>
-        <id>https://guozixu2001.github.io/post/immutable-and-mutable-type/</id>
-        <link href="https://guozixu2001.github.io/post/immutable-and-mutable-type/">
-        </link>
-        <updated>2022-04-20T03:42:41.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="anatomy-of">anatomy of  <code>=</code></h1>
-<p>区别于C/C++的 <code>=</code> 是直接的复制，Java中的 <code>=</code> 是指向的改变（相当于C中的指针，但是和C++的引用还有些不同，C++的引用不能再指向其他变量）。<br>
-可以把C/C++中的变量理解为一个小盒子， <code>=</code> 理解为直接改变这个小盒子中的内容。<br>
-把Java中的变量（python也是这样）理解为风筝线， <code>=</code> 仅仅是指向了其他的变量。</p>
-<p><strong>那么什么是 immutable type 呢？</strong><br>
-一旦被创建，则引用不可变（指针不变），但是其中的值还是可以改变的。</p>
-<pre><code class="language-java">String s = &quot;abc&quot;;
-s = s.concat(&quot;d&quot;); // create a new String Object with content &quot;abcd&quot;,
-                            // original String with &quot;abc&quot; waitin g for gc
-</code></pre>
-<p><strong>在snapshot图中：</strong> 用双线的圆圈表示</p>
-<h1 id="java中的final关键字">Java中的final关键字</h1>
-<ul>
-<li>final类无法派生子类</li>
-<li>final变量无法改变引用，但是“盒子”中的值还是可以改变的</li>
-<li>finial method 无法被子类重写</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

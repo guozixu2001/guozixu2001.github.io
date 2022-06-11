@@ -1,0 +1,253 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SOLID原则 | Rocco&#39;s Cache</title>
+<link rel="shortcut icon" href="https://guozixu2001.github.io//favicon.ico?v=1654965474753">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://guozixu2001.github.io//styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="SOLID原则 | Rocco&#39;s Cache - Atom Feed" href="https://guozixu2001.github.io//atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="为什么需要SOLID原则？
+无论是软件系统设计，还是代码实现，遵循有效和明确的设计原则，都利于系统软件灵活可靠，安全快速的落地，更重要的是能灵活地应对需求，简化系统扩展和维护，避免无效的编码。
+单一职责（SRP）
+
+single repon..." />
+    <meta name="keywords" content="软件构造" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://guozixu2001.github.io/">
+  <img class="avatar" src="https://guozixu2001.github.io//images/avatar.png?v=1654965474753" alt="">
+  </a>
+  <h1 class="site-title">
+    Rocco&#39;s Cache
+  </h1>
+  <p class="site-description">
+    Rocco写东西的Cache
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              SOLID原则
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-05-25
+              </span>
+              <span>
+                5 min read
+              </span>
+              
+                <a href="https://guozixu2001.github.io/tag/h0ub4yJc9/" class="post-tag">
+                  # 软件构造
+                </a>
+              
+            </div>
+            
+              <img class="post-feature-image" src="https://guozixu2001.github.io//post-images/solid-yuan-ze.jpg" alt="">
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="为什么需要solid原则">为什么需要SOLID原则？</h1>
+<p>无论是软件系统设计，还是代码实现，遵循有效和明确的设计原则，都利于系统软件灵活可靠，安全快速的落地，更重要的是能灵活地应对需求，简化系统扩展和维护，避免无效的编码。</p>
+<h1 id="单一职责srp">单一职责（SRP）</h1>
+<blockquote>
+<p>single reponsibility priciple</p>
+</blockquote>
+<h2 id="相关设计模式">相关设计模式</h2>
+<p>面对违背单一职责原则的程序代码，我们可以利用外观模式，代理模式，桥接模式，适配器模式，命令模式对已有设计进行重构，实现多职责的分离。</p>
+<h2 id="简单的应用场景">简单的应用场景</h2>
+<p>只要做过项目，肯定要接触到用户、机构、角色管理这些模块，基本上使用的都是RBAC模型（Role-Based Access Control，基于角色的访问控制，通过分配和取消角色来完成用户权限的授予和取消，使动作主体（用户）与资源的行为（权限）分离），确实是一个很好的解决办法。我们这里要讲的是用户管理、修改用户的信息、增加机构（一个人属于多个机构）、增加角色等，用户有这么多的信息和行为要维护，我们就把这些写到一个接口中。<br>
+<img src="https://guozixu2001.github.io//post-images/1654963348022.png" alt="" loading="lazy"><br>
+但是这样的设计不是很好的设计，应该把用户的信息抽取成一个BO（Business Object，业务对象），把行为抽取成一个Biz（Business Logic，业务逻辑），按照这个思路对类图进行修正。<br>
+<img src="https://guozixu2001.github.io//post-images/1654963398863.png" alt="" loading="lazy"><br>
+以上把一个接口拆分成两个接口的动作，就符合单一职责原则：有且只有一个原因引起类的变更。</p>
+<h1 id="开闭原则ocp">开闭原则（OCP）</h1>
+<p>开闭原则 (OCP) 英文全称为 Open-Closed Principle，基本定义是软件中的对象（类，模块，函数等）应该对于扩展是开放的，但是对于修改是封闭的。这里的对扩展开放表示这添加新的代码，就可以让程序行为扩展来满足需求的变化；对修改封闭表示在扩展程序行为时不要修改已有的代码，进而避免影响原有的功能。</p>
+<h2 id="应用场景">应用场景</h2>
+<p>有一个用于图表显示的 Display 类，它能绘制各种类型的图表，比如饼状图，柱状图等；而需要绘制特定图表时，都强依赖了对应类型的图表，Display 类的内部实现如下：</p>
+<pre><code class="language-java">public void display(String type) {
+    if (type.equals(&quot;pie&quot;)) {  
+      PieChart chart = new PieChart();  
+      chart.display();  
+    }  else if (type.equals(&quot;bar&quot;)) {  
+      BarChart chart = new BarChart();  
+      chart.display();  
+    } 
+}
+</code></pre>
+<p>基于上述的代码，如果需要新增一个图表，比如折线图 LineChart ，就要修改 Display 类的 display() 方法，增加新增的判断逻辑，很显然这样的做法违反开闭原则。而让类的实现符合开闭原则的方式就是引入抽象图表类 AbstractChart，作为其他图表的基类，让 Display 依赖这个抽象图表类 AbstractChart，然后通过 Display 决定使用哪种具体的图表类，实现代码变成了这样：</p>
+<pre><code class="language-java">private Abstractchart chart;
+
+public void display() {
+    chart.display();  
+}
+</code></pre>
+<p>现在我们需要新增折线图显示，在客户端向 Display 中注入一个 LineChart 对象即可，无须修改现有类库的源代码。</p>
+<h2 id="相关的设计模式">相关的设计模式</h2>
+<p>可以用到的设计模式有很多，比如工厂模式，观察者模式，模板方法模式，策略模式，组合模式，使用相关设计模式的关键点就是识别出最有可能变化和扩展的部分，然后构造抽象来隔离这些变化。</p>
+<h1 id="里式替换原则-lsp">里式替换原则 (LSP)</h1>
+<h2 id="基本概念">基本概念</h2>
+<p>里式替换原则 (LSP) 英文全称为 Liskov Substitution Principle，基本定义为：在不影响程序正确性的基础上，所有使用基类的地方都能<strong>使用其子类的对象</strong>来替换。这里提到的基类和子类说的就是具有继承关系的两类对象，当我们传递一个子类型对象时，需要保证程序不会改变任何原基类的行为和状态，程序能正常运作。</p>
+<h2 id="原则">原则</h2>
+<ul>
+<li>子类可以实现父类的抽象方法，但不能覆盖父类的非抽象方法</li>
+<li>子类可以有自己的个性</li>
+<li>子类型中重写的方法必须有相同或子类型的<strong>返回值</strong>或者符合co-variant的参数</li>
+<li>子类型中重写的方法必须使用同样类型的<strong>参数</strong>或者符合contra-variant的参数(此种情况Java目<br>
+前按照重载overload处理)</li>
+<li>子类型重写的方法不能有额外的异常</li>
+</ul>
+<h1 id="接口隔离原则-isp">接口隔离原则 (ISP)</h1>
+<h2 id="基本概念-2">基本概念</h2>
+<p>接口隔离原则 (ISP) 英文全称为 Interface Segregation Principle，基本定义：客户端不应该依赖那些它不需要的接口。客户端应该只依赖它实际使用的方法，因为如果一个接口具备了若干个方法，那就意味着它的实现类都要实现所有接口方法，从代码结构上就十分臃肿</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81solid%E5%8E%9F%E5%88%99">为什么需要SOLID原则？</a></li>
+<li><a href="#%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3srp">单一职责（SRP）</a>
+<ul>
+<li><a href="#%E7%9B%B8%E5%85%B3%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">相关设计模式</a></li>
+<li><a href="#%E7%AE%80%E5%8D%95%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF">简单的应用场景</a></li>
+</ul>
+</li>
+<li><a href="#%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99ocp">开闭原则（OCP）</a>
+<ul>
+<li><a href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF">应用场景</a></li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F">相关的设计模式</a></li>
+</ul>
+</li>
+<li><a href="#%E9%87%8C%E5%BC%8F%E6%9B%BF%E6%8D%A2%E5%8E%9F%E5%88%99-lsp">里式替换原则 (LSP)</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5">基本概念</a></li>
+<li><a href="#%E5%8E%9F%E5%88%99">原则</a></li>
+</ul>
+</li>
+<li><a href="#%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99-isp">接口隔离原则 (ISP)</a>
+<ul>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5-2">基本概念</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://guozixu2001.github.io/post/ru-he-zheng-que-de-cong-list-zhong-shan-chu-yuan-su-java/">
+              <h3 class="post-title">
+                如何正确的从List中删除元素(Java)？
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  
+  <a class="rss" href="https://guozixu2001.github.io//atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
